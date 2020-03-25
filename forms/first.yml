@@ -1,0 +1,10 @@
+name: first
+label: First
+description: This is the first form tab.
+property_inputs:
+- reference: .properties.first
+  label: First property!
+  description: The first property.
+- reference: .properties.tile_max_connections
+  label: Max connections
+  description: Max connections

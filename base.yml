@@ -1,0 +1,40 @@
+---
+name: bosh-uaa-client
+label: BOSH UAA Client
+description: Serves as an example tile.
+metadata_version: "2.7"
+minimum_version_for_upgrade: 0.0.1
+product_version: $( version )
+service_broker: true
+provides_product_versions:
+- name: bosh-uaa-client
+  version: $( version )
+    
+icon_image: $( icon )
+
+rank: 90
+serial: false
+
+post_deploy_errands: []
+    
+releases:
+- $( release "uaa_crud" )    
+
+stemcell_criteria: $( stemcell "ubuntu-xenial" )
+property_blueprints:
+- name: first
+  type: text
+  configurable: true
+  optional: true
+
+form_types:
+- name: first
+  label: First
+  description: This is the first form tab.
+  property_inputs:
+  - reference: .properties.first
+    label: First property!
+    description: The first property.
+
+job_types:
+- $( instance_group "uaa-client-create" )

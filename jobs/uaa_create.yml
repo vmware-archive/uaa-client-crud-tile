@@ -1,0 +1,17 @@
+name: uaa_create
+release: uaa_crud
+consumes: |
+  credhub:
+    from: credhub
+    deployment: (( ..cf.deployment_name ))
+manifest: |
+  uaacrud:
+    endpoint: (($director.hostname))
+    admin_identity: (($self.uaa_client_name))
+    admin_secret: (($self.uaa_client_secret))
+    target_client_identity: myuser
+    target_client_secret: mypass
+    client_grant_types: client_credentials, refresh_token
+    client_scopes: bosh.read
+    client_authorities: bosh.read
+    #token_validity: 10000

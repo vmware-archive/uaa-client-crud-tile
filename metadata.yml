@@ -1,0 +1,100 @@
+description: Serves as an example tile.
+service_broker: true
+form_types:
+- description: This is the first form tab.
+  label: First
+  name: first
+  property_inputs:
+  - description: The first property.
+    label: First property!
+    reference: .properties.first
+icon_image: icon.png
+job_types:
+- description: This is an instance group.
+  dynamic_ip: 1
+  instance_definition:
+    configurable: true
+    constraints:
+      max: 1
+      min: 0
+    default: 1
+    label: Instances
+    name: instances
+    type: integer
+  label: UAA Client Create
+  max_in_flight: 1
+  name: uaa-client-create
+  resource_definitions:
+  - configurable: true
+    constraints:
+      min: 1024
+    default: 1024
+    label: RAM
+    name: ram
+    type: integer
+  - configurable: true
+    constraints:
+      min: 2000
+    default: 4000
+    label: Ephemeral Disk
+    name: ephemeral_disk
+    type: integer
+  - configurable: false
+    constraints:
+      min: 1024
+    default: 1024
+    label: Persistent Disk
+    name: persistent_disk
+    type: integer
+  - configurable: true
+    constraints:
+      min: 1
+    default: 1
+    label: CPU
+    name: cpu
+    type: integer
+  resource_label: UAA Client Create
+  single_az_only: true
+  static_ip: 0
+  templates:
+  - consumes: |
+      credhub:
+        from: credhub
+        deployment: (( ..cf.deployment_name ))
+    manifest: |
+      uaacrud:
+        endpoint: (($director.hostname))
+        admin_identity: (($self.uaa_client_name))
+        admin_secret: (($self.uaa_client_secret))
+        target_client_identity: myuser
+        target_client_secret: mypass
+        client_grant_types: client_credentials, refresh_token
+        client_scopes: bosh.read
+        client_authorities: bosh.read
+        #token_validity: 10000
+    name: uaa_create
+    release: uaa_crud
+label: BOSH UAA Client
+metadata_version: "2.7"
+minimum_version_for_upgrade: 0.0.1
+name: bosh-uaa-client
+post_deploy_errands: []
+product_version: 0.0.2
+property_blueprints:
+- configurable: true
+  name: first
+  optional: true
+  type: text
+provides_product_versions:
+- name: bosh-uaa-client
+  version: 0.0.2
+rank: 90
+releases:
+- file: uaa-crud-release.tgz
+  name: uaa_crud
+  sha1: 08e8f99e2bc4df24a2116b172f56e34d9432fd09
+  version: 0+dev.22
+serial: false
+stemcell_criteria:
+  os: ubuntu-xenial
+  version: "621.29"
